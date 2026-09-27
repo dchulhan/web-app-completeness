@@ -1,0 +1,58 @@
+# Web App Completeness
+
+> Production rules for PWAs and mobile web apps. Gate, not a framework.
+
+Start: /AGENTS.md
+Catalogue: /RULES.yaml
+Intent: /docs/WHY.md
+Workflow: /docs/HOW-TO-USE.md
+Humans: /docs/FOR-HUMANS.md
+Audit: /audit/AUDIT.md
+Sources: /references.md
+
+## Rules
+
+- /rules/00-principles.md
+- /rules/01-domain-hosting.md
+- /rules/02-metadata-seo-social.md
+- /rules/03-pwa-install-offline.md
+- /rules/04-ux-states.md
+- /rules/05-accessibility.md
+- /rules/06-engineering-hygiene.md
+- /rules/07-responsive-visual-system.md
+- /rules/08-functional-integrity.md
+- /rules/09-legal-compliance.md
+- /rules/10-cloudflare-dns.md
+- /rules/11-cloudflare-mx-email.md
+- /rules/12-cloudflare-workers.md
+- /rules/13-cloudflare-pages.md
+- /rules/14-web-style.md
+- /rules/15-google-style.md
+- /rules/16-apple-hig.md
+
+## Style
+
+- /style/README.md
+- /style/this-repo.md
+- /style/web.md
+- /style/google-developer-docs.md
+- /style/google-html-css.md
+- /style/apple-hig.md
+
+## Checklists
+
+- /checklists/pre-launch.md
+- /checklists/five-second-slop-test.md
+- /checklists/lighthouse-gates.yml
+- /checklists/cloudflare.md
+
+## Templates
+
+- /templates/html-head.html
+- /templates/manifest.webmanifest
+- /templates/service-worker.example.js
+- /templates/404.html
+- /templates/offline.html
+- /templates/wrangler.toml.example
+- /templates/_headers
+- /templates/cloudflare-dns.md
