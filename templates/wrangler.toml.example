@@ -1,0 +1,26 @@
+# Example only. Set compatibility_date to today when you copy this.
+name = "app"
+main = "src/index.ts"
+compatibility_date = "2026-09-27"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 0.01
+
+# Generate types after binding changes:
+# npx wrangler types
+
+# Secrets:
+# npx wrangler secret put API_TOKEN
+
+# [[routes]]
+# pattern = "app.example.com"
+# custom_domain = true

@@ -2,60 +2,67 @@
 
 Production rules for PWAs and mobile web apps.
 
-This repository is a gate, not a style guide. It exists so a build that "works on my laptop" cannot be mistaken for a product. Use it before launch, during review, and as the contract an agent or junior must satisfy.
+This repository is a gate. It exists so a build that works on one laptop is not mistaken for a product. Humans tick checklists. Agents load `RULES.yaml` and `AGENTS.md`. Both use the same ids.
+
+## Start here
+
+| You are | Open |
+| --- | --- |
+| Human, ten minutes | [checklists/five-second-slop-test.md](checklists/five-second-slop-test.md) |
+| Human, shipping | [docs/FOR-HUMANS.md](docs/FOR-HUMANS.md) then [checklists/pre-launch.md](checklists/pre-launch.md) |
+| Human on Cloudflare | [checklists/cloudflare.md](checklists/cloudflare.md) |
+| Agent | [AGENTS.md](AGENTS.md) then [RULES.yaml](RULES.yaml) |
+| Writing words | [style/README.md](style/README.md) |
+| Asking why | [docs/WHY.md](docs/WHY.md) |
 
 ## What this covers
 
-1. Domain and hosting (no preview host in production)
+1. Domain and hosting
 2. Metadata, SEO, and social previews
 3. PWA installability and offline behaviour
-4. Boring UX states (404, loading, empty, error)
-5. Accessibility structure
+4. UX states (404, loading, empty, error)
+5. Accessibility
 6. Engineering hygiene
 7. Responsive and visual consistency
-8. Functional integrity (every control works)
-9. Legal and compliance floor
+8. Functional integrity
+9. Legal floor
+10. Cloudflare DNS, MX, Workers, Pages
+11. Web, Google, and Apple style guides
 
-Canonical sources: [web.dev PWA checklist](https://web.dev/articles/pwa-checklist), [MDN PWA best practices](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Best_practices), WCAG 2.2 AA, Core Web Vitals.
-
-## How to use
-
-| Audience | Start here |
-| --- | --- |
-| Shipping today | [checklists/pre-launch.md](checklists/pre-launch.md) |
-| Five-second slop test | [checklists/five-second-slop-test.md](checklists/five-second-slop-test.md) |
-| Agent or auditor | [RULES.yaml](RULES.yaml) then [audit/AUDIT.md](audit/AUDIT.md) |
-| Implementing a page | [templates/](templates/) |
-| Understanding *why* | [rules/](rules/) |
-
-Severity in `RULES.yaml`:
+## Severity
 
 - `blocker`: do not ship
-- `major`: ship only with an explicit waiver
-- `minor`: track and fix in the next pass
+- `major`: ship only with a named waiver
+- `minor`: track
 
 ## Audit order
 
-Do not start with colour. Start with host, secrets, and whether the primary CTA works.
+Host and secrets first. Taste last.
 
 1. Production host and `noindex` on previews
-2. Secrets and console hygiene
-3. Per-route title, description, canonical, OG, favicon
-4. 404, offline, loading, empty, error
-5. Heading outline and image `alt`
-6. Manifest + service worker + offline fallback
-7. Viewport matrix and token drift
-8. Click every control
-9. Lighthouse PWA / a11y / SEO / CWV gates
+2. Cloudflare DNS and mail proxy status
+3. Secrets and console hygiene
+4. Per-route metadata
+5. 404, offline, loading, empty, error
+6. Heading outline and image `alt`
+7. Manifest, service worker, offline fallback
+8. Viewport matrix and token drift
+9. Click every control
+10. Lighthouse gates
 
 ## Layout
 
 ```
-rules/          Normative prose per area
-checklists/     Human-run gates
-templates/      Copy-paste heads, manifest, SW, headers
-audit/          Procedure, route sheet, viewport matrix
-RULES.yaml      Machine-readable rule catalogue
+AGENTS.md       Agent contract
+llms.txt        Machine index
+docs/           Why and how
+rules/          Normative prose
+style/          Which writing guide wins
+checklists/     Human tick lists
+templates/      Copy-paste artefacts
+audit/          Procedure and worksheets
+RULES.yaml      Canonical ids
+references.md   First-party sources
 ```
 
 ## Licence
