@@ -1,0 +1,26 @@
+# CI gates. Adjust only with a written waiver.
+# Run against the production origin on a mobile profile.
+
+lighthouse:
+  form_factor: mobile
+  scores_min:
+    performance: 80
+    accessibility: 90
+    best_practices: 90
+    seo: 90
+    pwa: pass
+  vitals:
+    lcp_ms: 2500
+    inp_ms: 200
+    cls: 0.1
+    ttfb_ms: 800
+
+bundle:
+  initial_js_kb_warn: 200
+  initial_js_kb_fail: 350
+
+headers_required:
+  - Strict-Transport-Security
+  - X-Content-Type-Options
+  - Referrer-Policy
+  - Content-Security-Policy

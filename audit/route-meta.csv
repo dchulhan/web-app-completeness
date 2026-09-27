@@ -1,0 +1,3 @@
+path,title,description,canonical,og_image,h1,indexable,notes
+/,Page topic | Brand,Unique description,https://example.com/,https://example.com/og/home.png,Page topic,yes,
+/pricing,,,, ,,,

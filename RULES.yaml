@@ -1,0 +1,296 @@
+# Web App Completeness — machine-readable rule catalogue
+# Severity: blocker | major | minor
+# Area ids match rules/*.md
+
+version: 1
+updated: 2026-09-27
+conformance_targets:
+  pwa_core: web.dev/articles/pwa-checklist
+  pwa_practices: MDN Progressive Web Apps best practices
+  a11y: WCAG 2.2 AA
+  vitals:
+    lcp_s: 2.5
+    inp_ms: 200
+    cls: 0.1
+    ttfb_ms: 800
+
+rules:
+  - id: HOST-001
+    area: domain-hosting
+    severity: blocker
+    title: Production traffic uses a custom domain
+    check: Document origin is not *.vercel.app, *.netlify.app, *.pages.dev, *.web.app, or another preview/default host.
+    fix: Attach an apex or www host to the production deployment. Redirect the unused variant to the canonical host.
+
+  - id: HOST-002
+    area: domain-hosting
+    severity: blocker
+    title: Preview and staging are noindex
+    check: Preview responses include X-Robots-Tag: noindex (or equivalent meta). Staging custom domains also send noindex.
+    fix: Set the header in the framework config when ENV is preview. Do not rely on platform defaults once a custom domain is attached.
+
+  - id: HOST-003
+    area: domain-hosting
+    severity: blocker
+    title: HTTPS only, no mixed content
+    check: All documents and assets load over HTTPS. HTTP requests redirect. No mixed-content console warnings.
+    fix: Enforce HTTPS at the edge. Rewrite asset URLs. Service workers require a secure context.
+
+  - id: HOST-004
+    area: domain-hosting
+    severity: major
+    title: One canonical host
+    check: www and apex do not both serve indexable content. Trailing-slash policy is consistent.
+    fix: 301 the non-canonical host and slash variant to the canonical URL.
+
+  - id: META-001
+    area: metadata-seo-social
+    severity: blocker
+    title: Unique title per indexable URL
+    check: Every public route has a distinct title, typically 50-60 characters, brand last.
+    fix: Generate titles from route data. Ban a shared default title on interior pages.
+
+  - id: META-002
+    area: metadata-seo-social
+    severity: blocker
+    title: Unique meta description per indexable URL
+    check: Every public route has a distinct description of about 155-160 characters.
+    fix: Write descriptions as click copy, not keyword lists. No site-wide identical snippet.
+
+  - id: META-003
+    area: metadata-seo-social
+    severity: blocker
+    title: Self-referencing canonical
+    check: Each indexable page has link[rel=canonical] pointing at its own production HTTPS URL.
+    fix: Emit the absolute canonical from the router. Never point canonical at a preview host.
+
+  - id: META-004
+    area: metadata-seo-social
+    severity: major
+    title: Favicon set is complete
+    check: favicon.ico, SVG or PNG icons, and apple-touch-icon 180 exist and return 200.
+    fix: See templates/html-head.html. Missing favicons 404 in the tab and in mobile SERPs.
+
+  - id: META-005
+    area: metadata-seo-social
+    severity: major
+    title: Open Graph and social preview
+    check: og:title, og:description, og:image (1200x630), og:url, og:type, og:site_name, and twitter:card are present and unique where the page is unique.
+    fix: Absolute HTTPS image URL. Test with a debugger. Do not reuse one generic OG image on every route unless the product is a single-page utility.
+
+  - id: META-006
+    area: metadata-seo-social
+    severity: major
+    title: robots.txt and sitemap are intentional
+    check: robots.txt allows public routes, disallows private and preview. sitemap.xml lists only canonical production URLs and is submitted in Search Console.
+    fix: Generate the sitemap from the route table. Keep preview hosts out.
+
+  - id: META-007
+    area: metadata-seo-social
+    severity: minor
+    title: Structured data where it earns rich results
+    check: Organisation on the home route. Article/Product/WebApplication where relevant. Valid JSON-LD.
+    fix: Validate with a structured-data tester. Invalid schema is worse than none.
+
+  - id: PWA-001
+    area: pwa-install-offline
+    severity: blocker
+    title: Valid web app manifest
+    check: Manifest is linked, served with the correct MIME type, and includes name or short_name, start_url, display standalone|fullscreen|minimal-ui, theme_color, background_color, icons at 192 and 512 plus a maskable icon.
+    fix: See templates/manifest.webmanifest. Validate in DevTools > Application > Manifest.
+
+  - id: PWA-002
+    area: pwa-install-offline
+    severity: blocker
+    title: Service worker with fetch handler
+    check: A service worker is registered at an appropriate scope and handles fetch. DevTools shows activated and running.
+    fix: Register from the document origin. Include a fetch listener or Chromium will not treat the app as installable.
+
+  - id: PWA-003
+    area: pwa-install-offline
+    severity: blocker
+    title: Custom offline fallback
+    check: With the network off, a branded offline page or cached shell renders. The browser default offline page does not.
+    fix: Precache offline.html during install. For navigation requests that fail, return that document with status 200.
+
+  - id: PWA-004
+    area: pwa-install-offline
+    severity: major
+    title: App shell available offline
+    check: Chrome, navigation, and a loading skeleton render with DevTools offline after a first visit.
+    fix: Precache hashed shell assets. Cache-first for those assets. Network-first or stale-while-revalidate for data.
+
+  - id: PWA-005
+    area: pwa-install-offline
+    severity: major
+    title: Cache versioning
+    check: Caches are named with a release id. Activate deletes predecessor caches.
+    fix: See templates/service-worker.example.js.
+
+  - id: PWA-006
+    area: pwa-install-offline
+    severity: major
+    title: Install and permission prompts are contextual
+    check: beforeinstallprompt is captured and shown after a value moment. Notification and geolocation are not requested on first paint.
+    fix: iOS has no beforeinstallprompt. Detect standalone and show a short Add to Home Screen hint instead.
+
+  - id: UX-001
+    area: ux-states
+    severity: blocker
+    title: Custom 404
+    check: Unknown paths return HTTP 404 with a branded page that keeps primary navigation and a path home.
+    fix: See templates/404.html. SPA catch-alls must still send 404 for unknown public URLs.
+
+  - id: UX-002
+    area: ux-states
+    severity: major
+    title: Loading states reserve space
+    check: Asynchronous regions use skeletons or placeholders with reserved dimensions. No infinite spinner as the only pattern.
+    fix: Match skeleton geometry to the final content to protect CLS.
+
+  - id: UX-003
+    area: ux-states
+    severity: major
+    title: Empty states have a next action
+    check: Zero-data views explain why they are empty and offer one clear action.
+    fix: Write the empty state as part of the feature, not after launch.
+
+  - id: UX-004
+    area: ux-states
+    severity: major
+    title: Useful error messages
+    check: Failures name what broke and what the user can do. No bare "Something went wrong" as the only copy.
+    fix: Map status codes and client exceptions to copy. Log the raw error server-side.
+
+  - id: UX-005
+    area: ux-states
+    severity: major
+    title: Form errors are local
+    check: Validation messages sit next to the field. Submit does not silently fail.
+    fix: Use native constraint validation plus a summary for screen readers.
+
+  - id: A11Y-001
+    area: accessibility
+    severity: blocker
+    title: Heading outline is a real outline
+    check: One h1 per page. Levels nest without skips. Headings are not used for font size.
+    fix: Map the page to h1-h3 before styling. Test with a headings list in the accessibility tree.
+
+  - id: A11Y-002
+    area: accessibility
+    severity: blocker
+    title: Images have appropriate alt
+    check: Informative images have descriptive alt. Decorative images have alt="". Linked images describe the destination.
+    fix: Ban empty missing attributes. Review generated alt for hallucination.
+
+  - id: A11Y-003
+    area: accessibility
+    severity: major
+    title: Controls are semantic
+    check: Links are a[href]. Buttons are button. Icon-only controls have an accessible name. Focus is visible.
+    fix: Do not click-handle a div. Restore a 2px offset focus ring.
+
+  - id: A11Y-004
+    area: accessibility
+    severity: major
+    title: Contrast and motion
+    check: Text meets WCAG 2.2 AA contrast. prefers-reduced-motion is honoured. prefers-color-scheme is honoured if a dark theme is claimed.
+    fix: Tokenise colour. Gate animation on the media query.
+
+  - id: A11Y-005
+    area: accessibility
+    severity: major
+    title: Keyboard and input
+    check: All tasks complete with keyboard only. Hit targets are at least 24px (prefer 44px on touch). Pointer and keyboard both work.
+    fix: Tab order follows visual order. No keyboard traps.
+
+  - id: ENG-001
+    area: engineering-hygiene
+    severity: blocker
+    title: No secrets in the client
+    check: Source and bundles contain no service-role keys, private API tokens, or connection strings.
+    fix: Move secrets to the server. Rotate anything that shipped. Scan the bundle before release.
+
+  - id: ENG-002
+    area: engineering-hygiene
+    severity: major
+    title: Production console is clean
+    check: No application console.error on happy paths. No leftover console.log. No failed network calls for missing assets.
+    fix: Strip logs in the production build. Fix 404 assets.
+
+  - id: ENG-003
+    area: engineering-hygiene
+    severity: major
+    title: Development artefacts are not public
+    check: .env, .map (if policy forbids), README drafts, and preview-only files are not reachable on the production host.
+    fix: Deny at the edge. Do not copy the whole repo into the static root.
+
+  - id: ENG-004
+    area: engineering-hygiene
+    severity: major
+    title: JavaScript budget
+    check: Initial JS is justified. No unexpected multi-megabyte vendor blobs on first load.
+    fix: Code-split routes. Analyse the bundle. Lazy-load below-the-fold widgets.
+
+  - id: ENG-005
+    area: engineering-hygiene
+    severity: major
+    title: Core Web Vitals gates
+    check: LCP < 2.5s, INP < 200ms, CLS < 0.1 on a mid-range mobile profile.
+    fix: See checklists/lighthouse-gates.yml. Enforce in CI, not only locally.
+
+  - id: ENG-006
+    area: engineering-hygiene
+    severity: major
+    title: Content-Security-Policy exists
+    check: A CSP is sent. It is not 'unsafe-inline' everywhere without nonces.
+    fix: Start report-only, then enforce. Lock down script-src first.
+
+  - id: VIS-001
+    area: responsive-visual-system
+    severity: blocker
+    title: Layouts work beyond the author viewport
+    check: 320px, 768px, 1024px, 1440px, and a tall narrow device show no horizontal overflow on primary tasks.
+    fix: Content-out breakpoints. Test real devices, not only the design frame.
+
+  - id: VIS-002
+    area: responsive-visual-system
+    severity: major
+    title: Long text and empty data do not break layout
+    check: Long names, long titles, and zero records still compose.
+    fix: Wrap, truncate with title, or reflow. Never assume English lorem length.
+
+  - id: VIS-003
+    area: responsive-visual-system
+    severity: major
+    title: Design tokens are shared
+    check: Spacing, type scale, radii, icon sizes, and button variants do not drift page to page.
+    fix: See templates/tokens.css. New values require a token, not a one-off.
+
+  - id: FN-001
+    area: functional-integrity
+    severity: blocker
+    title: Every visible control works
+    check: Every button and link either navigates, submits, or explains why it is disabled. No dead "functional looking" controls.
+    fix: Walk every route with a click map. Remove or implement placeholders.
+
+  - id: FN-002
+    area: functional-integrity
+    severity: major
+    title: Deep links resolve
+    check: Sharing or reloading an interior URL restores that view.
+    fix: Real routes, not only client state. Required for PWA discoverability.
+
+  - id: LEGAL-001
+    area: legal-compliance
+    severity: major
+    title: Privacy and terms are reachable
+    check: Privacy policy and terms exist if you collect accounts, cookies, or personal data. Cookie consent matches actual trackers.
+    fix: Link from footer and account screens. Do not ship analytics before the policy.
+
+  - id: LEGAL-002
+    area: legal-compliance
+    severity: major
+    title: Auth and tenancy boundaries
+    check: Logged-out users cannot read logged-in documents. Tenant A cannot read tenant B.
+    fix: Test with two accounts before launch. This is a product defect, not a later hardening task.
