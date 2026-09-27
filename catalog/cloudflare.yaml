@@ -1,0 +1,159 @@
+version: 1
+area_group: cloudflare
+rules:
+  - id: CF-DNS-001
+    area: cloudflare-dns
+    severity: major
+    title: Full setup uses Cloudflare nameservers
+    check: Public NS are the assigned Cloudflare nameservers unless a documented partial setup exists.
+    fix: Complete full setup after records are imported.
+  - id: CF-DNS-002
+    area: cloudflare-dns
+    severity: major
+    title: HTTP hostnames that need Cloudflare are proxied
+    check: A, AAAA, and CNAME used for HTTPS to the app are orange-cloud.
+    fix: Enable proxy on web hostnames.
+  - id: CF-DNS-003
+    area: cloudflare-dns
+    severity: blocker
+    title: Non-HTTP records stay DNS-only
+    check: MX, mail A/AAAA, SPF, DKIM, DMARC, and verification TXT are grey-cloud.
+    fix: Disable proxy. Cloudflare does not proxy SMTP on port 25.
+  - id: CF-DNS-004
+    area: cloudflare-dns
+    severity: major
+    title: Do not mix proxied and DNS-only on one hostname
+    check: Each hostname is all-proxied or all-DNS-only.
+    fix: Split names or align proxy status.
+  - id: CF-DNS-005
+    area: cloudflare-dns
+    severity: major
+    title: DNSSEC matches the current nameservers
+    check: Registrar DNSSEC off before an NS change. Cloudflare DNSSEC on after cutover.
+    fix: Follow Cloudflare full-setup DNSSEC order.
+  - id: CF-DNS-006
+    area: cloudflare-dns
+    severity: major
+    title: Apex and www have one canonical target
+    check: One host is canonical. The other 301s.
+    fix: Redirect rule plus HOST-004.
+  - id: CF-MX-001
+    area: cloudflare-mx
+    severity: blocker
+    title: MX targets are DNS-only
+    check: MX records are not proxied and match the mail provider.
+    fix: Set proxy off. Copy provider hostnames exactly.
+  - id: CF-MX-002
+    area: cloudflare-mx
+    severity: blocker
+    title: Mail host A or AAAA is DNS-only
+    check: If mail.example.com exists, it is grey-cloud.
+    fix: Disable proxy. Orange-cloud mail hosts break SMTP.
+  - id: CF-MX-003
+    area: cloudflare-mx
+    severity: major
+    title: Single SPF record lists real senders
+    check: One TXT SPF. Includes match actual platforms.
+    fix: Merge includes. Remove duplicate SPF records.
+  - id: CF-MX-004
+    area: cloudflare-mx
+    severity: major
+    title: DKIM exists for every sending platform
+    check: Each provider selector resolves.
+    fix: Add the TXT the provider issued.
+  - id: CF-MX-005
+    area: cloudflare-mx
+    severity: major
+    title: DMARC exists and will leave p=none
+    check: _dmarc TXT is present with rua.
+    fix: Move to quarantine then reject after reports are clean.
+  - id: CF-MX-006
+    area: cloudflare-mx
+    severity: minor
+    title: Non-sending domains deny mail
+    check: Domains that never send have v=spf1 -all and reject DMARC.
+    fix: Publish restrictive records.
+  - id: CF-W-001
+    area: cloudflare-workers
+    severity: major
+    title: Compatibility date is current
+    check: compatibility_date is recent. nodejs_compat is on if node:* is imported.
+    fix: Set compatibility_date to today on new work.
+  - id: CF-W-002
+    area: cloudflare-workers
+    severity: major
+    title: Env types come from wrangler types
+    check: Env is generated, not hand-written.
+    fix: Run wrangler types after binding changes.
+  - id: CF-W-003
+    area: cloudflare-workers
+    severity: blocker
+    title: Worker secrets are not in source
+    check: wrangler.toml and git contain no production secrets.
+    fix: wrangler secret put.
+  - id: CF-W-004
+    area: cloudflare-workers
+    severity: major
+    title: Request and response bodies are streamed
+    check: Unbounded user bodies are not fully buffered.
+    fix: Use TransformStream and pipeTo.
+  - id: CF-W-005
+    area: cloudflare-workers
+    severity: minor
+    title: Bindings beat REST calls to Cloudflare services
+    check: KV, R2, D1, Queues are used via bindings.
+    fix: Declare bindings in Wrangler.
+  - id: CF-W-006
+    area: cloudflare-workers
+    severity: major
+    title: Background work is not on the critical path
+    check: Logging and retries use waitUntil, Queues, or Workflows.
+    fix: ctx.waitUntil for short follow-up.
+  - id: CF-W-007
+    area: cloudflare-workers
+    severity: blocker
+    title: No global mutable request state
+    check: Module scope does not store per-request user data.
+    fix: Isolates are reused.
+  - id: CF-W-008
+    area: cloudflare-workers
+    severity: major
+    title: Logs and traces enabled before production
+    check: observability.logs and observability.traces are on.
+    fix: See templates/wrangler.toml.example.
+  - id: CF-W-009
+    area: cloudflare-workers
+    severity: blocker
+    title: workers.dev is not the customer origin
+    check: Public links use a custom domain or zone route.
+    fix: Attach a proxied custom domain.
+  - id: CF-P-001
+    area: cloudflare-pages
+    severity: blocker
+    title: Pages production uses a custom domain
+    check: Customers do not land on project.pages.dev as the marketed origin.
+    fix: Add a custom domain. Redirect pages.dev to it.
+  - id: CF-P-002
+    area: cloudflare-pages
+    severity: blocker
+    title: Pages previews are noindex
+    check: curl -sI on a preview hash shows x-robots-tag: noindex.
+    fix: Keep platform default. Put Access in front of private previews.
+  - id: CF-P-003
+    area: cloudflare-pages
+    severity: major
+    title: No extra cache-everything on Pages HTML
+    check: Custom cache rules do not freeze HTML across deploys.
+    fix: Trust Pages deploy cache.
+  - id: CF-P-004
+    area: cloudflare-pages
+    severity: major
+    title: _headers and _redirects are intentional
+    check: Security headers exist. Redirects do not loop.
+    fix: See templates/_headers.
+  - id: CF-P-005
+    area: cloudflare-pages
+    severity: major
+    title: Production branch is explicit
+    check: Only the named production branch publishes to the customer domain.
+    fix: Lock the production branch in Pages settings.
