@@ -1,31 +1,36 @@
 # References
 
-Normative and practical sources used by this catalogue. Prefer the first-party documents when they disagree with a blog.
+First-party sources. Prefer these when a blog disagrees.
 
 ## PWA and installability
 
 - https://web.dev/articles/pwa-checklist
 - https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Best_practices
 - https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
-- https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps/how-to/best-practices
-- https://developers.google.com/search/blog/2016/11/building-indexable-progressive-web-apps
 
-## Hosting and indexation
+## Cloudflare DNS and mail
 
-- https://vercel.com/kb/guide/are-vercel-preview-deployment-indexed-by-search-engines
-- https://vercel.com/kb/guide/avoiding-duplicate-content-with-vercel-app-urls
+- https://developers.cloudflare.com/dns/get-started/
+- https://developers.cloudflare.com/dns/manage-dns-records/how-to/email-records/
+- https://developers.cloudflare.com/dns/troubleshooting/email-issues/
+- https://developers.cloudflare.com/dmarc-management/security-records/
+- https://developers.cloudflare.com/dns/llms.txt
 
-## Metadata and social
+## Cloudflare Workers and Pages
 
-- Open Graph protocol: https://ogp.me/
-- Title and description practice as used by search engines (length is rendered width, not a hard character cap)
+- https://developers.cloudflare.com/workers/best-practices/workers-best-practices/
+- https://developers.cloudflare.com/pages/configuration/custom-domains/
+- https://developers.cloudflare.com/pages/configuration/preview-deployments/
+- https://developers.cloudflare.com/pages/configuration/serving-pages/
+- https://developers.cloudflare.com/workers/llms.txt
+- https://developers.cloudflare.com/pages/llms.txt
 
-## Accessibility
+## Style guides
 
-- WCAG 2.2: https://www.w3.org/TR/WCAG22/
-- https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Text_labels_and_names
-
-## Performance
-
-- Core Web Vitals (LCP, INP, CLS)
-- Lighthouse PWA, SEO, and accessibility audits
+- https://developers.google.com/style
+- https://developers.google.com/style/highlights
+- https://google.github.io/styleguide/htmlcssguide.html
+- https://developer.apple.com/design/human-interface-guidelines/
+- https://developer.apple.com/design/human-interface-guidelines/writing
+- https://developer.apple.com/design/human-interface-guidelines/web-views
+- https://www.gov.uk/guidance/content-design

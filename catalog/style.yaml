@@ -1,0 +1,51 @@
+version: 1
+area_group: style
+rules:
+  - id: STYLE-001
+    area: web-style
+    severity: major
+    title: One h1 states the page job
+    check: Each view has a single descriptive h1.
+    fix: Aligns with A11Y-001.
+  - id: STYLE-002
+    area: web-style
+    severity: minor
+    title: Controls use verbs and shared words
+    check: Primary actions are verbs. The same object is not renamed across screens.
+    fix: See style/web.md and Apple HIG Writing.
+  - id: STYLE-003
+    area: web-style
+    severity: major
+    title: Semantic HTML for structure
+    check: Headings, lists, links, and buttons are real elements.
+    fix: See style/google-html-css.md.
+  - id: STYLE-004
+    area: web-style
+    severity: minor
+    title: Link text describes the destination
+    check: No click here as the only link text.
+    fix: Google developer documentation highlights.
+  - id: STYLE-005
+    area: google-style
+    severity: minor
+    title: Developer docs follow Google highlights
+    check: Second person, active voice, sentence-case headings, conditions before instructions.
+    fix: See style/google-developer-docs.md and style/this-repo.md.
+  - id: STYLE-006
+    area: google-style
+    severity: minor
+    title: Template markup follows Google HTML/CSS basics
+    check: Lowercase names, two-space indent, semantic structure.
+    fix: See style/google-html-css.md.
+  - id: STYLE-007
+    area: apple-hig
+    severity: minor
+    title: Apple-surface UI follows HIG writing
+    check: Installed iOS/iPadOS/macOS UI uses verbs, plain language, and consistent casing.
+    fix: See style/apple-hig.md.
+  - id: STYLE-008
+    area: apple-hig
+    severity: minor
+    title: Do not rebuild Safari in a web view
+    check: In-app web views are not a second browser.
+    fix: Apple HIG Web views.
