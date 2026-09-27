@@ -1,0 +1,10 @@
+# Production. Preview hosts should noindex at the header layer instead.
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /app/
+Disallow: /reset/
+Disallow: /internal/
+
+Sitemap: https://example.com/sitemap.xml
